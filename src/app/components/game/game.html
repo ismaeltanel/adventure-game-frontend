@@ -1,59 +1,64 @@
 <div class="game-container">
   <!-- Start Game Section -->
-  <div *ngIf="!gameStarted" class="start-section">
-    <h1>Text Adventure Game</h1>
-    <input #playerNameInput type="text" placeholder="Enter your name" />
-    <button (click)="startGame(playerNameInput.value)">Start Game</button>
-  </div>
+  @if (!gameStarted) {
+    <div class="start-section">
+      <h1>Text Adventure Game</h1>
+      <input #playerNameInput type="text" placeholder="Enter your name" />
+      <button (click)="startGame(playerNameInput.value)">Start Game</button>
+    </div>
+  }
 
   <!-- Game Interface -->
-  <div *ngIf="gameStarted" class="game-interface">
-    <!-- Current Location -->
-    <div class="location-display">
-      <h2>Current Location</h2>
-      <p>{{ currentLocation }}</p>
-    </div>
+  @if (gameStarted) {
+    <div class="game-interface">
+      <div class="location-display">
+        <h2>Current Location</h2>
+        <p>{{ currentLocation }}</p>
+      </div>
 
-    <!-- Movement Buttons -->
-    <div class="movement-section">
-      <h3>Movement</h3>
-      <div class="movement-buttons">
-        <button (click)="movePlayer('N')">North</button>
-        <button (click)="movePlayer('S')">South</button>
-        <button (click)="movePlayer('E')">East</button>
-        <button (click)="movePlayer('W')">West</button>
+      <!-- Movement Buttons -->
+      <div class="movement-section">
+        <h3>Movement</h3>
+        <div class="movement-buttons">
+          <button (click)="movePlayer('N')">North</button>
+          <button (click)="movePlayer('S')">South</button>
+          <button (click)="movePlayer('E')">East</button>
+          <button (click)="movePlayer('W')">West</button>
+        </div>
       </div>
-    </div>
 
-    <!-- Inventory Section -->
-    <div class="inventory-section">
-      <h3>Your Inventory</h3>
-      <div *ngIf="inventory.length === 0">
-        <p>Your inventory is empty</p>
+      <!-- Inventory Section -->
+      <div class="inventory-section">
+        <h3>Your Inventory</h3>
+        @for (item of inventory; track item.id) {
+          <div class="inventory-item">
+            <span>{{ item.name }} - {{ item.description }}</span>
+            <button (click)="dropItem(item.id)">Drop</button>
+          </div>
+        } @empty {
+          <p>Your inventory is empty</p>
+        }
       </div>
-      <div *ngFor="let item of inventory" class="inventory-item">
-        <span>{{ item.name }} - {{ item.description }}</span>
-        <button (click)="dropItem(item.id)">Drop</button>
-      </div>
-    </div>
 
-    <!-- Location Items Section -->
-    <div class="location-items-section">
-      <h3>Items Here</h3>
-      <div *ngIf="locationItems.length === 0">
-        <p>No items here</p>
+      <!-- Location Items Section -->
+      <div class="location-items-section">
+        <h3>Items Here</h3>
+        @for (item of locationItems; track item.id) {
+          <div class="location-item">
+            <span>{{ item.name }} - {{ item.description }}</span>
+            <button (click)="pickupItem(item.id)">Pick Up</button>
+          </div>
+        } @empty {
+          <p>No items here</p>
+        }
       </div>
-      <div *ngFor="let item of locationItems" class="location-item">
-        <span>{{ item.name }} - {{ item.description }}</span>
-        <button (click)="pickupItem(item.id)">Pick Up</button>
-      </div>
-    </div>
 
-    <!-- Action Buttons -->
-    <div class="action-section">
-      <h3>Actions</h3>
-      <button (click)="buyLight()" [disabled]="currentLocationId !== 6">Buy Light (Shop)</button>
-      <button (click)="resetGame()">Reset Game</button>
+      <!-- Action Buttons -->
+      <div class="action-section">
+        <h3>Actions</h3>
+        <button (click)="buyLight()" [disabled]="currentLocationId !== 6">Buy Light (Shop)</button>
+        <button (click)="resetGame()">Reset Game</button>
+      </div>
     </div>
-  </div>
+  }
 </div>

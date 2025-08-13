@@ -34,6 +34,7 @@ export class Game {
         this.currentLocation = response;
         this.checkGameStatus(response);
         this.loadCurrentLocationItems();
+        this.loadInventory();
       });
     }
   }
